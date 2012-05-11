@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.craftysoft.wordjar"
+    android:versionCode="1"
+    android:versionName="1.0" android:installLocation="auto">
+ 
+    <uses-sdk android:minSdkVersion="8" android:maxSdkVersion="10"/>
+
+    <uses-feature android:name="android.hardware.microphone" android:required="true" />
+	
+	<uses-permission android:name="android.permission.BLUETOOTH" />
+	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+	<uses-permission android:name="android.permission.BROADCAST_STICKY" />
+	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+	<uses-permission android:name="android.permission.INTERNET" />   
+	<uses-permission android:name="android.permission.RECORD_AUDIO"/>	
+	
+	
+	<!-- Read that google will not do market filtering for vibrate due to many devices not having it -->
+	<uses-permission android:name="android.permission.VIBRATE"/>
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+        <activity
+            android:label="@string/app_name"
+            android:name=".WordJarActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+		<activity android:name="com.craftysoft.wordjar.AboutActivity" 
+             android:screenOrientation="portrait" 
+             android:configChanges="keyboardHidden|orientation"
+			 android:theme="@style/Theme.Transparent"
+			 android:launchMode="singleTop"></activity>                             
+			 
+		<activity android:name="com.craftysoft.wordjar.WordDetailActivity" 
+             android:screenOrientation="portrait" 
+             android:configChanges="keyboardHidden|orientation"
+			 android:theme="@style/Theme.FloatingActivity"
+			 android:windowSoftInputMode="stateHidden"></activity>                             
+			 
+		<activity android:name="com.craftysoft.wordjar.Preferences" android:screenOrientation="portrait"></activity>
+    
+    </application>
+        
+</manifest>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WordJar</string>
+    <string name="speech_prompt">TEST</string>
+    <string name="tab_accepted_word">Approved</string>
+    <string name="tab_rejected_word">Denied</string>
+    
+	<string name="col_separator">/</string>
+    
+	<string name="namespace">com.craftysoft.wordjar</string>  
+        
+	<string name="wordnik_api_key">259440f3685d049174b330bb73e0413e03bc0b6ae9c7756b4</string>  
+	    
+	<string name="wordnik_error">Unable to connect to wordnik at this time, verify device has network connection.</string>  
+	    
+	<string name="islistening">WordJar is currently listening for speech&#8230;</string>  
+	    	    	    	    
+	<string name="header_approved_col_0"></string>
+	<string name="header_approved_col_1">Today/Goal</string>
+	<string name="header_approved_col_2">Total</string>
+
+	<string name="error_message_duplicate">Word is already in your list!</string>    	
+	<string name="error_message_generic">Error occurred</string>    	
+	<string name="error_message_unknown_fatal">Fatal error encountered! WordJar shutting down.</string>
+	<string name="error_message_no_speech_fatal">Speech recognizer not found! WordJar shutting down.</string>
+	
+	<string name="header_rejected_col_0"></string>
+	<string name="header_rejected_col_1">Today</string>
+	<string name="header_rejected_col_2">Total</string>
+	
+	<string name="tab_header_approved">Approved</string>
+	<string name="tab_header_rejected">Denied</string>
+	<string name="tab_header_dictionary">wordnik</string>
+	    
+	<string name="email_address">www.craftysoft.me</string>
+		
+	<string name="speak_accepted_prompt">Listening for approved word</string>
+	<string name="speak_rejected_prompt">Listening for denied word</string>	    
+	<string name="speak_verify_prompt">Was this your word?</string>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" 
+    android:background="#fff" 
+    android:padding="5dp">
+
+    <com.craftysoft.wordjar.CustomFontTextView
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:text="@string/header_rejected_col_0"
+        android:layout_weight="33" 
+        android:gravity="center_horizontal" 
+        style="@style/Wordlist_Header"/>
+    
+	<com.craftysoft.wordjar.CustomFontTextView
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:text="@string/header_rejected_col_1"
+        android:layout_weight="33" 
+        android:gravity="center_horizontal"
+        style="@style/Wordlist_Header"/>
+
+	<com.craftysoft.wordjar.CustomFontTextView
+	        android:layout_width="0px"
+	        android:layout_height="wrap_content"
+	        android:text="@string/header_rejected_col_2"
+   	    	android:gravity="center_horizontal"
+   	    	android:layout_weight="33"
+   	    	style="@style/Wordlist_Header"/>
+</LinearLayout>

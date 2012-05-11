@@ -1,0 +1,26 @@
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android" android:key="rootPref" android:title="WorJar Preferences">
+
+	<CheckBoxPreference 
+	    android:key="checkbox_alerts" 
+	    android:defaultValue="true"
+	    android:enabled="true" 
+	    android:summary="Uncheck to mute all alerts" 
+	    android:title="Alerts"/>
+	
+	<CheckBoxPreference 
+	    android:key="checkbox_vibration" 
+	    android:defaultValue="true" 	    
+	    android:enabled="true" 
+	    android:title="Vibration" 
+	    android:summary="Uncheck to turn off vibration"/>
+	
+	<PreferenceCategory>
+	    
+	    <Preference android:key="preference_reset" android:title="Reset" android:enabled="true" android:summary="Click to reset all WordJar statistics"/>
+		<Preference android:key="preference_delete" android:title="Delete" android:enabled="true" android:summary="Click to delete all WordJar words"/>
+	    
+	</PreferenceCategory>
+
+
+</PreferenceScreen>

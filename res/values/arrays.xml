@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- Loading dialog phrases to keep the app fun and fresh -->    
+	<string-array name="loading_tags">
+		<item >Loading&#8230;</item>
+	</string-array>
+	
+	<!-- Inserting dialog phrases to keep the app fun and fresh -->    
+	<string-array name="inserting_tags">
+		<item >Adding&#8230;</item>
+	</string-array>
+	
+	<!-- Resetting dialog phrases to keep the app fun and fresh -->    
+	<string-array name="reseting_tags">
+		<item >Reseting&#8230;</item>
+	</string-array>
+	
+	<!-- Deleting dialog phrases to keep the app fun and fresh -->    
+	<string-array name="deleting_tags">
+		<item >Deleting&#8230;</item>
+	</string-array>
+	
+	<!-- Updating dialog phrases to keep the app fun and fresh -->    
+	<string-array name="updating_tags">
+		<item >Updating&#8230;</item>
+	</string-array>
+	    
+
+	<!-- Speak dialog phrases to keep the app fun and fresh -->    
+	<string-array name="speak_accepted_tags">
+		<item >Enhance your vocabulary!</item>
+		<item >Speak to me!</item>
+		<item >WordJar\'s listening&#8230;</item>
+		<item >Creating good habits!</item>
+		<item >www.craftysoft.me</item>				
+	</string-array>
+	
+	<!-- Speak dialog phrases to keep the app fun and fresh -->    
+	<string-array name="speak_rejected_tags">
+		<item >Enhance your vocabulary!</item>
+		<item >Speak to me!</item>
+		<item >WordJar\'s listening&#8230;</item>
+		<item >Break bad habits!</item>
+		<item >Stop saying that word!</item>
+		<item >www.craftysoft.me</item>		
+	</string-array>
+	    
+</resources>

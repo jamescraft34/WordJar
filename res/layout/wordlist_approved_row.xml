@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" 
+    android:background="#fff" 
+    android:padding="5dp" 
+    android:clickable="true" 
+    android:hapticFeedbackEnabled="true">    
+    
+    <com.craftysoft.wordjar.CustomFontTextView
+        android:id="@+id/textViewWord"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="33" 
+        android:gravity="center_horizontal"
+        style="@style/Wordlist_Row"/>
+    
+	<com.craftysoft.wordjar.CustomFontTextView
+	    android:id="@+id/textViewCol1"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="33" 
+        android:gravity="center_horizontal"
+        style="@style/Wordlist_Row"/>
+
+	<com.craftysoft.wordjar.CustomFontTextView
+		android:id="@+id/textViewCol2"	        
+	    android:layout_width="0px"
+	    android:layout_height="wrap_content"
+   	    android:gravity="center_horizontal"
+   	    android:layout_weight="33"
+   	    style="@style/Wordlist_Row"/>
+	   
+</LinearLayout>

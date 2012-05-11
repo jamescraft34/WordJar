@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" android:background="@color/base_white"
+    android:id="@+id/root">
+
+    <include
+        android:id="@+id/includeHeader"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/header" />
+    
+   
+    <TabHost
+        android:id="@android:id/tabhost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" 
+            android:padding="2dp" >
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </TabWidget>
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="1dp">
+
+                <LinearLayout
+                    android:id="@+id/tabAccepted"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical" 
+                    android:visibility="invisible">
+                    
+                    <ListView
+			 	 		android:id="@+id/acceptedlist"
+			 	 		android:layout_width="match_parent"
+			 	 		android:layout_height="fill_parent" >
+					</ListView>
+					
+                   <com.craftysoft.wordjar.EmptyListImageView
+	        			android:id="@+id/emptyacceptedlist"
+				        android:layout_width="wrap_content"
+				        android:layout_height="fill_parent"
+					    android:layout_gravity="center" 
+				        android:visibility="gone"/>
+                                            
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tabRejected"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical"
+                    android:visibility="invisible">
+                   
+                    <ListView
+			 	 		android:id="@+id/rejectedlist"
+			 	 		android:layout_width="match_parent"
+			 	 		android:layout_height="fill_parent" >
+					</ListView>
+					
+                   <com.craftysoft.wordjar.EmptyListImageView
+	        			android:id="@+id/emptyrejectedlist"
+				        android:layout_width="wrap_content"
+				        android:layout_height="fill_parent"
+					    android:layout_gravity="center" 
+				        android:visibility="gone"/>
+                        
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tabDictionary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" 
+                    android:orientation="vertical"
+                    android:visibility="invisible">
+                    
+                    <include
+					       android:id="@+id/includeDictionaryLayout"
+					       android:layout_width="fill_parent"
+					       android:layout_height="fill_parent"
+					       layout="@layout/dictionary_layout" />
+                    
+                    
+                </LinearLayout>
+
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+    
+        
+      <FrameLayout
+      android:id="@+id/frameLayoutFooter"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+        
+        
+            <View        
+        android:layout_width="wrap_content"        
+        android:background="@drawable/gradient_line"        
+        android:layout_height="4dp" ></View>
+        
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:layout_gravity="bottom" android:gravity="bottom">
+
+                <ImageButton
+                    android:id="@+id/buttonSpeak"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:layout_weight="50" 
+                    android:src="@drawable/ic_speak"/>
+                
+                
+                <ImageButton
+                    android:id="@+id/buttonListen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:layout_weight="50" 
+                    android:src="@drawable/ic_listen_off"
+                    />
+
+            </LinearLayout>
+        </FrameLayout>
+    
+</LinearLayout>

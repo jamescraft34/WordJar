@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item android:id="@+id/itemPreferences" android:title="Preferences" android:visible="true" android:enabled="true" android:icon="@drawable/ic_menu_preference" android:titleCondensed="Preferences"></item>
+	<item android:id="@+id/itemAbout" android:title="About" android:visible="true" android:enabled="true" android:titleCondensed="About" android:icon="@drawable/ic_menu_friendslist"></item>
+
+</menu>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="app_background">#fff5f5f5</color>
+	<color name="light_red">#ba0305</color>
+	<color name="dark_red">#cc0000</color>
+		
+	<color name="text_tab_selected">#5d5d5d</color>
+	<color name="text_tab_unselected">#838183</color>
+	<color name="tab_indicator_text">#000000</color>
+		
+	<color name="base_red">#cc0000</color>
+    <color name="base_white">#ffffff</color>
+    <color name="base_black">#000000</color>
+    
+	<color name="wordlist_text">#636262</color>
+	<color name="wordlist_header_text">#636262</color>
+	
+	<color name="row_highlite">#ededed</color>
+	
+	<drawable name="transparent_background">#cf000000</drawable>
+	    
+</resources>
