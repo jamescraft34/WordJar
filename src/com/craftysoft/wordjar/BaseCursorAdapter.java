@@ -1,19 +1,13 @@
 package com.craftysoft.wordjar;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
 import android.widget.CursorAdapter;
-import android.widget.Toast;
-
-import com.craftysoft.wordjar.db.DBConstants;
-import com.craftysoft.wordjar.db.DBTasker;
-import com.craftysoft.wordjar.db.DBTasker.InsertNewWordTask;
 
 
 public abstract class BaseCursorAdapter extends CursorAdapter {
@@ -26,10 +20,16 @@ public abstract class BaseCursorAdapter extends CursorAdapter {
 	protected int _rowIndex = 0;
 	
 	protected OnClickListener _onClickListener = null;
+	protected OnLongClickListener _onLongClickListener = null;
 	
 	public void setRowOnClickListener(OnClickListener cl)
 	{
 		_onClickListener = cl;
+	}
+	
+	public void setRowOnLongClickListener(OnLongClickListener cl)
+	{
+		_onLongClickListener = cl;
 	}
 	
 	//use the view holder pattern for performance to reduce "findViewById" calls

@@ -29,6 +29,9 @@ public class RejectedWordCursorAdapter extends BaseCursorAdapter {
 			if(_onClickListener != null)
 				view.setOnClickListener(_onClickListener);
 			
+			if(_onLongClickListener != null)
+				view.setOnLongClickListener(_onLongClickListener);
+			
 			String column0Text = cursor.getString(DBConstants.WordTable.WORD_INDEX);    			
 			String column1Text = Integer.toString(cursor.getInt(cursor.getColumnIndex(DBConstants.WordTable.TODAYCOUNT_KEY)));
 			String column2Text = Integer.toString(cursor.getInt(cursor.getColumnIndex(DBConstants.WordTable.TOTALCOUNT_KEY)));

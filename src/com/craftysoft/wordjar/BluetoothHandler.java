@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
+import android.widget.Toast;
 
 //singleton class
 public class BluetoothHandler {
@@ -14,21 +15,35 @@ public class BluetoothHandler {
 	private static BluetoothHandler _instance = null;
 
 	private BluetoothAdapter mBluetoothAdapter = null;
-	private static Context _context = null;
+	private static  Context _context = null;
 	
 	private boolean _isBluetoothConnected = false;//only set when all BT components are connected and we should hear something 
 	
 	private boolean _isBluetoothSCOConnected = false;	
 	private boolean _isBluetoothAdapterConnected = false;	
+	
 	private boolean _isBluetoothDeviceConnected = false;	
     
+	public void set_btHeadsetListener(BluetoothHeadsetListener _btHeadsetListener) {
+		this._btHeadsetListener = _btHeadsetListener;
+	}
+
+
+	private BluetoothHeadsetListener _btHeadsetListener = null;
+	
+	public boolean is_isBluetoothDeviceConnected() {
+		return _isBluetoothDeviceConnected;
+	}
+
+
 	private boolean _isRegistered = false;	
+
 	private AudioManager _audioManager = null;
 		
 	//private to support singleton class pattern
 	private BluetoothHandler()
 	{
-	}
+	}	
 	
 	public static BluetoothHandler getInstance(Context context)
 	{
@@ -53,10 +68,12 @@ public class BluetoothHandler {
 				 
 				 if(l_state == AudioManager.SCO_AUDIO_STATE_CONNECTED)
 				 {
+			        // Toast.makeText(_context, "SCO On", Toast.LENGTH_SHORT).show();
 					 _isBluetoothSCOConnected = true;
 				 }
 				 else if(l_state == AudioManager.SCO_AUDIO_STATE_DISCONNECTED)
 				 {
+			        //Toast.makeText(_context, "SCO Off", Toast.LENGTH_SHORT).show();
 					 _isBluetoothSCOConnected = false;				 
 				 }
 			}
@@ -76,10 +93,14 @@ public class BluetoothHandler {
 				 if(l_state == BluetoothAdapter.STATE_ON)
 				 {
 					 _isBluetoothAdapterConnected = true;
+					 
+			        //Toast.makeText(_context, "Adapter On", Toast.LENGTH_SHORT).show();
 				 }
 				 else if(l_state == BluetoothAdapter.STATE_OFF)
 				 {
 					 _isBluetoothAdapterConnected = false;				 
+					 
+			        //Toast.makeText(_context, "Adapter Off", Toast.LENGTH_SHORT).show();
 				 }
 			}
 		}		
@@ -99,6 +120,9 @@ public class BluetoothHandler {
 	        if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) { 
 	            //Device is now connected 
 	        	_isBluetoothDeviceConnected = true;
+	        	
+	        	_btHeadsetListener.BtStateChanged();
+	        	//Toast.makeText(_context, "BT Connected", Toast.LENGTH_SHORT).show();
 	        } 
 //	        else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) { 
 //	           //Done searching 
@@ -109,7 +133,9 @@ public class BluetoothHandler {
 //	        } 
 	        else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) { 
 	           //Device has disconnected 
+	        	_btHeadsetListener.BtStateChanged();
 	        	_isBluetoothDeviceConnected = false;
+	        	//Toast.makeText(_context, "BT Disconnected", Toast.LENGTH_SHORT).show();
 	        }            
 	    } 
 	}; 
@@ -146,6 +172,9 @@ public class BluetoothHandler {
 	//handles checking for bluetooth availability and sets the broadcast recievers
 	public void registerHeadset(AudioManager audioManager)
 	{
+		if(_isRegistered)//don't reregister if already registered
+			return;
+		
     	IntentFilter bluetoothIntentFilter = new IntentFilter();
     	
     	bluetoothIntentFilter.addAction(AudioManager.ACTION_SCO_AUDIO_STATE_CHANGED);//SCO state
@@ -168,6 +197,9 @@ public class BluetoothHandler {
 	//make sure we call this when we are done with the bt 
 	public void unregisterHeadset()
 	{
+		if(!_isRegistered)//no need to unregister...
+			return;
+		
 		_context.unregisterReceiver(_btAudioManagerReciever);
 		_context.unregisterReceiver(_btAdapterReciever);
 		_context.unregisterReceiver(_btDeviceReciever);
@@ -194,8 +226,8 @@ public class BluetoothHandler {
 	
 	public void connect()
 	{
-		if(!_isBluetoothConnected)
-		{
+		//if(!_isBluetoothConnected)
+		//{
 			if(!_audioManager.isBluetoothScoOn())
 			{
 				//am.setBluetoothA2dpOn(true);
@@ -205,14 +237,14 @@ public class BluetoothHandler {
 				
 				_isBluetoothConnected = true;
 			}
-		}
+		//}
 	}
 	
 	public void disconnect()
 	{
-		if(_isBluetoothConnected)
-		{		
-			if(_audioManager.isBluetoothScoOn())
+		//if(_isBluetoothConnected)
+		//{		
+			if((_audioManager != null) && (_audioManager.isBluetoothScoOn()))
 			{
 				//am.setBluetoothA2dpOn(false);
 				_audioManager.setBluetoothScoOn(false);
@@ -221,7 +253,7 @@ public class BluetoothHandler {
 				
 				_isBluetoothConnected = false;
 			}
-		}
+		//}
 	}
 		
 	//return false is not available, true if available

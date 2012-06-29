@@ -29,7 +29,8 @@ public class CustomFontTextView extends TextView {
 	private void init()
 	{
 		try {
-			this.setTypeface(WordJarActivity.defaultFont);
+			if(!isInEditMode())//this will allow eclipse to display correctly in the layouts
+				this.setTypeface(WordJarActivity.defaultFont);
 		} catch (Exception e) {
 
 			e.printStackTrace();

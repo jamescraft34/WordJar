@@ -3,12 +3,15 @@ package com.craftysoft.wordjar;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.craftysoft.wordjar.db.DBConstants;
 
 public final class AcceptedWordCursorAdapter extends BaseCursorAdapter {
 
 	private final static int _layoutId  = R.layout.wordlist_approved_row;
+	
 	
 	public AcceptedWordCursorAdapter(Context context, Cursor c) {
 		super(context, c, _layoutId);
@@ -26,8 +29,12 @@ public final class AcceptedWordCursorAdapter extends BaseCursorAdapter {
 		else
 			view.setBackgroundResource(R.color.base_white);
 		
+				
 		if(_onClickListener != null)
 			view.setOnClickListener(_onClickListener);
+		
+		if(_onLongClickListener != null)
+			view.setOnLongClickListener(_onLongClickListener);
 		
 		String column0Text = cursor.getString(DBConstants.WordTable.WORD_INDEX);    
 		int todayCount = cursor.getInt(cursor.getColumnIndex(DBConstants.WordTable.TODAYCOUNT_KEY));
@@ -69,5 +76,10 @@ public final class AcceptedWordCursorAdapter extends BaseCursorAdapter {
 		holder.col1.setText(column1Text);
 		
 		holder.col2.setText(column2Text);
+		
+		//animate the word that was caught so the user can see
+		//if(column0Text.equals(WordJarActivity.currentWord))		
+		//	view.startAnimation(AnimationUtils.loadAnimation(_context, R.anim.wave));
+		//crafty
 	}
 }

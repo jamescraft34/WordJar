@@ -18,9 +18,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TabActivity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -49,6 +46,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -69,6 +67,7 @@ import com.craftysoft.wordjar.BluetoothHandler.BluetoothNotEnabledException;
 import com.craftysoft.wordjar.db.DBConstants;
 import com.craftysoft.wordjar.db.DBTasker;
 import com.craftysoft.wordjar.db.WordDBAdapter;
+import com.craftysoft.wordjar.db.DBTasker.DeleteWordTask;
 
 public class WordJarActivity extends TabActivity implements OnClickListener, OnTabChangeListener  {
 	
@@ -107,7 +106,7 @@ public class WordJarActivity extends TabActivity implements OnClickListener, OnT
 	private LinearLayout _linearLayoutHeaderRoot = null;
 	
 	//overriding font to use for all views
-	public static Typeface defaultFont = null;
+	public static Typeface defaultFont = Typeface.DEFAULT;
 	private static final String FONT_TYPE = "fonts/arcena.ttf";
 
 	private static final int VOICE_RECOGNITION_REQUEST_CODE = 1;
@@ -611,7 +610,63 @@ public class WordJarActivity extends TabActivity implements OnClickListener, OnT
 			new DBTasker(getApplicationContext()).new GetWordTask(_progressDialog, word, _getWordTaskListener).execute();
 			
 		}};
+		
+		
+		private TaskListener _deleteWordTaskListener = new TaskListener()
+		{		
+			@Override
+			public void performAction(BaseWord word, Object obj) 
+			{
+				if(obj == null)
+				{
+					//let user know word was deleted
+					//Toast.makeText(getApplicationContext(), "\"" + word.get_word() + "\" was deleted from your list.", Toast.LENGTH_SHORT).show();
+					
+					WordJarActivity.this.refreshUI(false);
+					
+					_masterWordMap.remove(word.get_word().toLowerCase());
+					
+					if(_masterWordMap.size() == 0)
+						setListenButtonEnabled(false);
+				}
+				else if(obj instanceof Exception)
+				{
+					Exception ex = (Exception)obj;
+					Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+				}
+			}
+		};
 
+	//click listener for each row of the base cursor adapter
+	private OnLongClickListener _rowLongClickListener = new OnLongClickListener(){
+
+		@Override
+		public boolean onLongClick(View v) {
+			v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+			
+			ViewHolder holder = (ViewHolder)v.getTag();		
+			
+			String word = holder.col0.getText().toString();
+
+			final BaseWord bw = _masterWordMap.get(word.toLowerCase());
+			
+			 new AlertDialog.Builder(WordJarActivity.this)
+				.setIcon(getResources().getDrawable(R.drawable.action_droid))
+         	.setTitle("Are you sure you want to delete \"" + word + "\"?") 
+         	.setPositiveButton("Ok", new DialogInterface.OnClickListener() { 
+	                @Override 
+	                public void onClick(DialogInterface dialog, int which) 
+	                {
+	                	//delete word
+						new DBTasker(getApplicationContext()).new DeleteWordTask(null, bw, _deleteWordTaskListener).execute();
+	                } 
+         	}) 
+         	.setNegativeButton("Cancel", null) 
+         	.show(); 	
+
+			return false;
+		}};
+		
 		
 	private OnClickListener _wordOfDayClickListener = new OnClickListener(){
 
@@ -757,6 +812,7 @@ public class WordJarActivity extends TabActivity implements OnClickListener, OnT
 					
 					_acceptedWordCursorAdapter = new AcceptedWordCursorAdapter(WordJarActivity.this, _acceptedWordsCursor);	
 					_acceptedWordCursorAdapter.setRowOnClickListener(_rowClickListener);
+					_acceptedWordCursorAdapter.setRowOnLongClickListener(_rowLongClickListener);
 					_acceptedListView.setAdapter(_acceptedWordCursorAdapter);
 									
 					//let the activity determine when to close the cursor...
@@ -784,6 +840,8 @@ public class WordJarActivity extends TabActivity implements OnClickListener, OnT
 										
 					_rejectedWordCursorAdapter = new RejectedWordCursorAdapter(WordJarActivity.this, _rejectedWordsCursor);
 					_rejectedWordCursorAdapter.setRowOnClickListener(_rowClickListener);
+					_rejectedWordCursorAdapter.setRowOnLongClickListener(_rowLongClickListener);
+
 					_rejectedListView.setAdapter(_rejectedWordCursorAdapter);
 					
 					//let the activity determine when to close the cursor...					
@@ -831,12 +889,38 @@ public class WordJarActivity extends TabActivity implements OnClickListener, OnT
     	//	_masterSoundEffects.muteAllAlarms(_alertsOff);
     	
     	_vibsOn = _pref.getBoolean("checkbox_vibration", true);
-
+    	
     	if(_bluetoothAvailable)
     		registerBluetoothHeadset();
     	
     	super.onResume();
     }
+    
+    
+    //determines the correct listening device to use
+    private void setAudioDevice(boolean connect)
+    {
+    	if((_bluetoothAvailable) && (_bluetoothHandler.is_isBluetoothDeviceConnected()))
+    		setBluetoothAsAudioDevice(connect);    	
+    	else //if(!_audioManager.isWiredHeadsetOn())
+    		setSpeakerPhoneAsAudioDevice(connect);
+    }
+    
+    private void setBluetoothAsAudioDevice(boolean connect)
+    {
+    	if(connect)
+    		_bluetoothHandler.connect();
+    	else
+    		_bluetoothHandler.disconnect();
+    }
+    private void setSpeakerPhoneAsAudioDevice(boolean connect)
+    {
+    	if(_audioManager != null)
+    	{
+    		_audioManager.setSpeakerphoneOn(connect);
+    	}
+    }
+    
 		
     @Override
     public void onDestroy()
@@ -958,7 +1042,7 @@ public class WordJarActivity extends TabActivity implements OnClickListener, OnT
 		_tabHost.setOnTabChangedListener(this);
 
 		//load custom font type
-        if(defaultFont == null)
+        //if(defaultFont == null)
         	defaultFont = Typeface.createFromAsset(WordJarActivity.this.getAssets(), FONT_TYPE);
 
         //if the following initialization steps fail the app will not function correctly so lets kill it
@@ -1163,9 +1247,22 @@ public class WordJarActivity extends TabActivity implements OnClickListener, OnT
     		_bluetoothHandler = null;
     	}
     }    
-
     
-    BluetoothDevice deviceBT = null;
+   // BluetoothDevice deviceBT = null;
+    
+    private BluetoothHeadsetListener _btHeadsetListener = new BluetoothHeadsetListener(){
+
+		@Override
+		public void BtStateChanged() {
+			if(_isListening)
+			{
+				stopListening();
+
+				//setAudioDevice(false);//reset so we can use the bt
+				//setAudioDevice(true);
+			}
+		}
+    };
     
     private void initializeBluetoothHeadset()
     {
@@ -1176,24 +1273,25 @@ public class WordJarActivity extends TabActivity implements OnClickListener, OnT
     	{			
     		_bluetoothHandler.isBluetoothAvailable();
     		
+    		_bluetoothHandler.set_btHeadsetListener(_btHeadsetListener);
     		
-			BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); 			
-			
-			// Loop through paired devices 
-			for (BluetoothDevice device : mBluetoothAdapter.getBondedDevices()) { 						
-			
-				deviceBT = device;
-				
-				BluetoothClass btc = device.getBluetoothClass();
-				int y = btc.getDeviceClass();
-				
-				int g = device.getBondState();
-				
-				String d = device.getName();
-			
-				int yyt = 9;
-				yyt = 8;
-			} 
+//			BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter(); 			
+//			
+//			// Loop through paired devices 
+//			for (BluetoothDevice device : mBluetoothAdapter.getBondedDevices()) { 						
+//			
+//				deviceBT = device;
+//				
+//				BluetoothClass btc = device.getBluetoothClass();
+//				int y = btc.getDeviceClass();
+//				
+//				int g = device.getBondState();
+//				
+//				String d = device.getName();
+//			
+//				int yyt = 9;
+//				yyt = 8;
+//			} 
 
     		
     		
@@ -1313,58 +1411,16 @@ public class WordJarActivity extends TabActivity implements OnClickListener, OnT
 
 		if(arg0.getId() == R.id.buttonSpeak)
 		{		
-			
-			/*			bt = new BluetoothHeadset(this, new BluetoothHeadset.ServiceListener(){
+			setAudioDevice(true);
 
-				@Override
-				public void onServiceConnected() {
-					int y = 0;
-					y = 9;
-					// TODO Auto-generated method stub
-					
-
-					
-				}
-
-				@Override
-				public void onServiceDisconnected() {
-					// TODO Auto-generated method stub
-					int y = 0;
-					y = 9;
-				}});
-
-				bt.connectHeadset(ddd);
-							
-				boolean g = bt.isConnected(ddd);			
-				BluetoothDevice dj =			bt.getCurrentHeadset();\
-			
-			*/
-			
-			
-			//make a call to handle the type of connectio!!! TODO TODO!!
-						
-//			if(_bluetoothAvailable)
-//				_bluetoothHandler.connect();
-//			this._spAccept.play(false);
-
-			startVoiceRecognitionActivity();        
-			
+			startVoiceRecognitionActivity();        			
 		}
 		else if(arg0.getId() == R.id.buttonListen)
 		{
-			
-//			if(_bluetoothAvailable)
-//				_bluetoothHandler.disconnect();			
-//			this._spAccept.play(false);
-
-
-//craftytodo
-			
 			if(_isListening)
 				stopListening();
 			else
 				startListening();
-			
 		}
 	}
 	
@@ -1378,6 +1434,9 @@ public class WordJarActivity extends TabActivity implements OnClickListener, OnT
 			_listenButton.setImageResource(R.drawable.ic_listen_spk);
 			_speakButton.setEnabled(false);
 //			_tabHost.getTabWidget().getChildTabViewAt(TABINDEX_DICTIONARYDOTCOM).setEnabled(false);
+
+			setAudioDevice(true);
+
 		}
 		
 		getSpeechRecognizer().startListening(_speechIntent);
@@ -1389,6 +1448,8 @@ public class WordJarActivity extends TabActivity implements OnClickListener, OnT
 		_speakButton.setEnabled(true);
 //		_tabHost.getTabWidget().getChildTabViewAt(TABINDEX_DICTIONARYDOTCOM).setEnabled(true); 
 
+		setAudioDevice(false);
+		
 		 if(getSpeechRecognizer() != null) 
 	     { 
 			// if(_isListening)
@@ -1442,6 +1503,13 @@ public class WordJarActivity extends TabActivity implements OnClickListener, OnT
 				{					
 					verifySpeechMatch(data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS), _currentTabIndex);
 				}
+				
+				//make sure we turn down input device stuff
+				setAudioDevice(false);
+				
+				
+				
+				
 			break;
 			case PREFERENCE_CODE:
 				//do nothing for now...
